@@ -1,35 +1,73 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React, { useState } from 'react'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [items, setItems] = useState([""])
+  const [words, setWords] = useState("");
+
+  function createWords(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    let str = "";
+    for (let i = 0; i < items.length; i++) {
+      str += items[i] + " "
+    }
+    setWords(str);
+
+  }
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className='full'>
+
+      <div className="App">
+        {items.length ? items.map((item, index) => {
+          return <Box key={index} val={item} index={index} items={items} setItems={setItems} />
+        }) : null}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <button onClick={(e) => { createWords(e) }}>create</button>
+      <div>{words}</div>
     </div>
   )
 }
 
 export default App
+interface BoxProps {
+  val: any,
+  setItems: any
+  index: number,
+  items: String[],
+
+}
+function Box(props: BoxProps) {
+  const { val, setItems, index, items } = props;
+  function addBefore(e: React.MouseEvent<HTMLDivElement>) {
+    e.preventDefault();
+    if (index === 0) {
+      setItems(["", ...items])
+    } else {
+      let arr = [...items];
+      arr.splice(index, 0, "");
+      setItems([...arr]);
+    }
+  }
+  function addAfter(e: React.MouseEvent<HTMLDivElement>) {
+    items.splice(index + 1, 0, "");
+    setItems([...items]);
+  }
+  return (
+    <React.Fragment>
+      {
+        <div className='before' onClick={(e) => { addBefore(e) }} />
+      }
+      <input placeholder='+' value={val} onChange={(e) => {
+        e.preventDefault();
+        let arr = [...items];
+        arr[index] = e.target.value;
+        setItems(arr);
+        setItems
+      }} />
+      {
+        <div className='before' onClick={(e) => { addAfter(e) }} />
+      }
+    </React.Fragment>
+  )
+}
