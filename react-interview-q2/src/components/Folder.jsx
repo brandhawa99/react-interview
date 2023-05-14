@@ -25,7 +25,7 @@ function Folder({ explorer, handleInsertNode = () => { } }) {
     setExpandText(false)
     nameRef.current.value = ""
   }
-
+  // initial case 
   if (explorer.isFolder) {
     return (
       <div style={{
@@ -53,6 +53,7 @@ function Folder({ explorer, handleInsertNode = () => { } }) {
         </form>
         <div style={{ display: expand ? "block" : "none", paddingLeft: 25 }}>
           {
+            // recursively call Folder 
             explorer.items.length ?
               explorer.items.map((item) => {
                 return (
@@ -60,12 +61,15 @@ function Folder({ explorer, handleInsertNode = () => { } }) {
                     <Folder explorer={item} />
                   </span>
                 )
-              }) : <div>no items</div>
+              }) :
+              // empty folders 
+              <div>no items</div>
           }
         </div>
       </div >
     )
   } else {
+    // break case
     return (
       <span className='file'>📄{explorer.name}</span>
     )
