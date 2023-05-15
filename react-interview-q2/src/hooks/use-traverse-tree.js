@@ -1,6 +1,6 @@
 const useTraverseTree = () => {
   function insertNode(tree, folderId, item, isFolder) {
-    // dfs
+    // break case 
     if (tree.id === folderId && tree.isFolder) {
       tree.items.unshift({
         id: new Date().getTime(),
@@ -12,6 +12,7 @@ const useTraverseTree = () => {
     }
     let latestNode = []
     latestNode = tree.items.map((ob) => {
+      // recursively call insert node
       return insertNode(ob, folderId, item, isFolder)
     })
     return { ...tree, items: latestNode }
